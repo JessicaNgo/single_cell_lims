@@ -104,7 +104,7 @@ DATABASES = {
     'default': {
         # for older django versions use ".postgresql_psycopg2"
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
+        'NAME': 'singlecell_dev',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -199,7 +199,11 @@ CELERY_ROUTES = {
 EMAIL_ADDRESS = ""
 EMAIL_PASSWORD = ""
 SMTP_SERVER = ""
+<<<<<<< HEAD
 SMTP_PORT = 0
+=======
+SMTP_PORT = 
+>>>>>>> updated workflow re-run mechanism, removed WorkflowFromRun, and added workflow run from sequencing.
 
 #=========================
 # Genesis cluster settings
