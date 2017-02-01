@@ -253,7 +253,7 @@ LibraryQuantificationAndStorageInlineFormset =  inlineformset_factory(
     fields = "__all__",
     help_texts = {
         'agilent_bioanalyzer_xad': ('Select a xad file to upload.'),
-        'agilent_bioanalyzer_png': ('Supported formats: png, jpg, jpeg, bmp.'),
+        'agilent_bioanalyzer_image': ('Supported formats: png, jpg, jpeg, bmp.'),
     }
     )
 
