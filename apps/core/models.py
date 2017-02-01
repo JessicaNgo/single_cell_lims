@@ -508,7 +508,6 @@ class LibraryQuantificationAndStorage(models.Model, FieldValue):
     'Box',
     'Position in box'
     ]
-
     values_to_exclude = [
     'id',
     'library',
