@@ -1,0 +1,9 @@
+django
+celery
+django-taggit
+django-simple-history
+django-widget-tweaks
+psycopg2
+pandas
+pyYAML
+xlsxwriter
