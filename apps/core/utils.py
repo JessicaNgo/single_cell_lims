@@ -515,7 +515,7 @@ class Submission(object):
 
     def __init__(self, df_pool, df_samples, output):
 
-        self.pool_start = 65
+        self.pool_start = 58
         self.sample_start = self.pool_start + len(df_pool) + 10
 
         self.writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -565,8 +565,10 @@ class Submission(object):
         input_cell = "{column}{row}"
         nextera_compatible = "Yes" if info_dict.get('nextera_compatible') else "No"
         truseq_compatible = "Yes" if info_dict.get('truseq_compatible') else "No"
+        bcgsc_standard = "Yes" if info_dict.get('bcgsc_standard') else "No"
         custom = "Yes" if info_dict.get('custom') else "No"
         pbal_library = "Yes" if info_dict.get('is_this_pbal_library') else "No"
+        is_this_chromium_library = "Yes" if info_dict.get('is_this_chromium_library') else "No"
         at_completion = "Return unused sample" if info_dict['at_completion']=="R" else "Destroy unused sample"
 
         # FORMATS
@@ -587,6 +589,7 @@ class Submission(object):
         dark_green = self.workbook.add_format({'pattern':True, 'bold':True, 'bg_color':'#73A94F','border':2})
         peach = self.workbook.add_format({'pattern':True, 'bold':True, 'align':'right','bg_color':'#F7C876', 'border':2})
 
+        # setting up header box border
         for x in range(0,column_span):
             for y in range(1,row):
                 if x == column_span - 1 and y == row - 1:
@@ -598,6 +601,7 @@ class Submission(object):
                 else:
                     self.worksheet.write(input_cell.format(column=self.columns[x], row=y), "", inner_format)
 
+        # writing header box text
         for x in range(0,len(HEADER)):
             if x == 0:
                 self.worksheet.write(input_cell.format(column="A", row=x+1), HEADER[x], header)
