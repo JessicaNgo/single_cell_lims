@@ -297,7 +297,7 @@ class GSCForm(object):
         'Library Construction Method',
         'Size Range (bp)',
         'Average Size (bp)',
-        'Chromium Sample Index Name' # Replaced from "Indexed? If the libraries are indexed, provide the index sequence from 5' to 3'"
+        'Chromium Sample Index Name', # Replaced from "Indexed? If the libraries are indexed, provide the index sequence from 5' to 3'"
         'Index Read Type (select from drop down list)',
         'Index Sequence', # Renamed from 'Dual Indices for LIMS Upload',
         'No. of cells/IP',
@@ -367,8 +367,9 @@ class GSCForm(object):
         self._sequencing.get_read_type_display(),
         self._sequencing.read1_length,
         self._sequencing.sequencing_goal,
-        "N/A",
+        self._sequencing.sequencing_instrument,
         self._sequencing.format_for_data_submission,
+        "N/A",
         "",
         ]
 
@@ -382,7 +383,8 @@ class GSCForm(object):
         return df
 
     def _get_data_df(self):
-        """return a dataframe of sublibrary information for the given library."""
+        """return a dataframe of sublibrary information for the given library.
+           NOTE: MUST use the same key values as seen in _data_colnames. """
         sample_columns = {
         'Taxonomy ID': self._sample.taxonomy_id,
         'Anonymous Patient ID': self._sample.anonymous_patient_id,
@@ -393,7 +395,7 @@ class GSCForm(object):
         'Anatomic Sub-Site': self._sample_addinfo.anatomic_sub_site,
         'Developmental Stage':self._sample_addinfo.developmental_stage,
         'Tissue Type': self._sample_addinfo.get_tissue_type_display(),
-        'Cell Type': self._sample_addinfo.cell_type,
+        'Cell Type (if sorted)': self._sample_addinfo.cell_type,
         'Cell Line ID': self._sample.cell_line_id,
         'Pathology/Disease Name (for diseased sample only)': self._sample_addinfo.pathology_disease_name,
         'Additional Pathology Information': self._sample_addinfo.additional_pathology_info,
@@ -416,6 +418,7 @@ class GSCForm(object):
         'Library Construction Method': self._libconst.library_construction_method,
         'Size Range (bp)': self._libquant.size_range,
         'Average Size (bp)': self._libquant.average_size,
+        'Chromium Sample Index Name': "",
         }
 
         sequencing_columns = {
@@ -435,17 +438,17 @@ class GSCForm(object):
 
         res = []
         sublib_set = self._library.sublibraryinformation_set.all()
-        index = lambda sl: sl.primer_i7 + sl.primer_i5 
+        index = lambda sl: sl.primer_i7 + sl.primer_i5 # no longer need this
         dual_index = lambda sl: sl.primer_i7 + '-' + sl.primer_i5
         for sl in sublib_set:
             d = {
             'Sub-Library ID': sl.get_sublibrary_id(),
-            "Indexed? If the libraries are indexed, provide the index sequence from 5' to 3'": index(sl),
-            'Dual Indices for LIMS Upload': dual_index(sl),
-            'I7_Index_ID': sl.index_i7,
-            'index': sl.primer_i7,
-            'I5_Index_ID': sl.index_i5,
-            'index2': sl.primer_i5,
+            'Index Sequence': dual_index(sl),
+            "Indexed? If the libraries are indexed, provide the index sequence from 5' to 3'": index(sl), #no longer need this
+            'I7_Index_ID': sl.index_i7, # no longer need this
+            'index': sl.primer_i7, # no longer need this
+            'I5_Index_ID': sl.index_i5, # no longer need this
+            'index2': sl.primer_i5, # no longer need this
             }
             d.update(sample_columns)
             d.update(library_columns)
@@ -540,11 +543,12 @@ class Submission(object):
     def set_column_width(self):
         self.worksheet.set_column('A:A', 45)
         self.worksheet.set_column('B:B', 45)
-        self.worksheet.set_column('C:AS', 15)
+        self.worksheet.set_column('C:AO', 15)
         return self.worksheet
 
     def write_address_box(self, info_dict):
         ## updated by jtaghiyar
+
         HEADER = ["Deliver/ship samples on dry ice or ice pack to:",
                   "%s" % info_dict['name'],
                   "%s" % info_dict['org'],
