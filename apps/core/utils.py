@@ -259,10 +259,13 @@ class GSCForm(object):
         'Read Type',
         'Read Length',
         'Sequencing Goal',
-        'Reference genome for alignment',
+        'Sequencer',
         'Format for data dissemination',
+        'Reference genome for alignment',
         'Additional comments',
         ]
+
+        #Pre May 2017 columns are commented, in case bugs are found with column order.
         self._data_colnames = [
         'Sub-Library ID',
         'Tube Label',
@@ -276,7 +279,7 @@ class GSCForm(object):
         'Anatomic Sub-Site',
         'Developmental Stage',
         'Tissue Type',
-        'Cell Type',
+        'Cell Type (if sorted)',
         'Cell Line ID',
         'Pathology/Disease Name (for diseased sample only)',
         'Additional Pathology Information',
@@ -294,9 +297,9 @@ class GSCForm(object):
         'Library Construction Method',
         'Size Range (bp)',
         'Average Size (bp)',
-        "Indexed? If the libraries are indexed, provide the index sequence from 5' to 3'",
+        'Chromium Sample Index Name' # Replaced from "Indexed? If the libraries are indexed, provide the index sequence from 5' to 3'"
         'Index Read Type (select from drop down list)',
-        'Dual Indices for LIMS Upload',
+        'Index Sequence', # Renamed from 'Dual Indices for LIMS Upload',
         'No. of cells/IP',
         'Crosslinking Method',
         'Crosslinking Time',
@@ -504,11 +507,12 @@ class Submission(object):
 
     """
     @author: Jamie Xu
+    Updated by Jessica Ngo for new GSC form as of May 2017
     """
 
     def __init__(self, df_pool, df_samples, output):
 
-        self.pool_start = 58
+        self.pool_start = 65
         self.sample_start = self.pool_start + len(df_pool) + 10
 
         self.writer = pd.ExcelWriter(output, engine='xlsxwriter')
