@@ -556,7 +556,9 @@ class Submission(object):
                   "",
                   "",
                   "Email: %s" % info_dict['email'],
-                  "Tel: %s" % info_dict['tel']
+                  "Tel: %s" % info_dict['tel'],
+                  "",
+                  "",
                   ]
 
         row = len(HEADER) + 2
@@ -609,7 +611,8 @@ class Submission(object):
                 self.worksheet.write(input_cell.format(column="A", row=x+1), HEADER[x], text)
 
 
-        self.worksheet.write(input_cell.format(column="A", row=row+2), "PLEASE PROVIDE COMPLETE INFORMATION FOR YOUR SAMPLES IN THE FIELDS BELOW.  ENTER \"N/A\" IN FIELDS THAT DO NOT APPLY TO YOUR SAMPLES.", red)
+        row+=2
+        self.worksheet.write(input_cell.format(column="A", row=row), "PLEASE PROVIDE COMPLETE INFORMATION FOR YOUR SAMPLES IN THE FIELDS BELOW.  ENTER \"N/A\" IN FIELDS THAT DO NOT APPLY TO YOUR SAMPLES.", red)
 
         self.worksheet.write(input_cell.format(column="A", row=row+4), "Submitting Organization:", right_align)
         self.worksheet.write(input_cell.format(column="B", row=row+4), info_dict['submitting_org'], left_align)
