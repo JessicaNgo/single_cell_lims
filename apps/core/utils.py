@@ -5,7 +5,7 @@ Created on June 6, 2016
 """
 
 import os, sys
-import pandas as pd 
+import pandas as pd
 import yaml
 from string import Template
 from collections import OrderedDict
@@ -548,6 +548,8 @@ class Submission(object):
 
     def write_address_box(self, info_dict):
         ## updated by jtaghiyar
+        # refactored to use relative spacing instead of hard coded spacing for ease if the GSC updates their form again..
+        # Row
 
         HEADER = ["Deliver/ship samples on dry ice or ice pack to:",
                   "%s" % info_dict['name'],
@@ -611,88 +613,111 @@ class Submission(object):
                 self.worksheet.write(input_cell.format(column="A", row=x+1), HEADER[x], text)
 
 
-        row+=2
+        row += 2
         self.worksheet.write(input_cell.format(column="A", row=row), "PLEASE PROVIDE COMPLETE INFORMATION FOR YOUR SAMPLES IN THE FIELDS BELOW.  ENTER \"N/A\" IN FIELDS THAT DO NOT APPLY TO YOUR SAMPLES.", red)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+4), "Submitting Organization:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+4), info_dict['submitting_org'], left_align)
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "Submitting Organization:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['submitting_org'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+5), "Name of Principal Investigator:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+5), info_dict['pi_name'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Name of Principal Investigator:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['pi_name'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+6), "Principal Investigator's email:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+6), info_dict['pi_email'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Principal Investigator's email:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['pi_email'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+7), "Name of Submitter:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+7), info_dict['submitter_name'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Name of Submitter:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['submitter_name'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+8), "Submitter's email:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+8), info_dict['submitter_email'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Submitter's email:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['submitter_email'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+9), "Submission Date:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+9), info_dict['submission_date'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Submission Date:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['submission_date'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+10), "Project Name:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+10), info_dict['project_name'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Project Name:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['project_name'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+11), "Statement of Work (SOW) #:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+11), info_dict['sow'], left_align)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Statement of Work (SOW) #:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), info_dict['sow'], left_align)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+14), "**Mandatory** Library Info:", yellow)
+        row += 3
+        self.worksheet.write(input_cell.format(column="A", row=row), "**Mandatory** Library Info:", yellow)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+15), "Nextera Compatible", light_green)
-        self.worksheet.write(input_cell.format(column="B", row=row+15), nextera_compatible)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Nextera Compatible", light_green)
+        self.worksheet.write(input_cell.format(column="B", row=row), nextera_compatible)
         # self.worksheet.data_validation(input_cell.format(column="B", row=row+15), {'validate':'list', 'source':['YES','NO']})
 
-        self.worksheet.write(input_cell.format(column="A", row=row+16), "TruSeq Compatible", light_green)
-        self.worksheet.write(input_cell.format(column="B", row=row+16), truseq_compatible)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "TruSeq Compatible", light_green)
+        self.worksheet.write(input_cell.format(column="B", row=row), truseq_compatible)
         # self.worksheet.data_validation(input_cell.format(column="B", row=row+16), {'validate':'list', 'source':['YES','NO']})
 
-        self.worksheet.write(input_cell.format(column="A", row=row+17), "Custom", light_green)
-        self.worksheet.write(input_cell.format(column="B", row=row+17), custom)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "BC Genome Science Centre Standard", light_green)
+        self.worksheet.write(input_cell.format(column="B", row=row), bcgsc_standard)
+
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Custom", light_green)
+        self.worksheet.write(input_cell.format(column="B", row=row), custom)
         # self.worksheet.data_validation(input_cell.format(column="B", row=row+17), {'validate':'list', 'source':['YES','NO']})
 
-        self.worksheet.write(input_cell.format(column="A", row=row+19), "Is this is PBAL Library?", peach)
-        self.worksheet.write(input_cell.format(column="B", row=row+19), pbal_library)
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "Is this is PBAL Library?", peach)
+        self.worksheet.write(input_cell.format(column="B", row=row), pbal_library)
         # self.worksheet.data_validation(input_cell.format(column="B", row=row+19), {'validate':'list', 'source':['YES','NO']})
 
-        self.worksheet.write(input_cell.format(column="A", row=row+21), "For Custom Library Info only:", dark_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+22), "Primer 1 Name:", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+23), "Primer 1 Sequence (with 5' and 3'):", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+24), "Primer 2 Name:", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+25), "Primer 2 Sequence (with 5' and 3'):", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+26), "Adaptor 1 Name:", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+27), "Adaptor 1 Sequence (with 5' and 3'):", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+28), "Adaptor 2 Name:", light_green)
-        self.worksheet.write(input_cell.format(column="A", row=row+29), "Adaptor 2 Sequence (with 5' and 3'):", light_green)
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "For Custom Library Info only:", dark_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Primer 1 Name:", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Primer 1 Sequence (with 5' and 3'):", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Primer 2 Name:", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Primer 2 Sequence (with 5' and 3'):", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Adaptor 1 Name:", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Adaptor 1 Sequence (with 5' and 3'):", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Adaptor 2 Name:", light_green); row+=1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Adaptor 2 Sequence (with 5' and 3'):", light_green); row+=2
 
-        self.worksheet.write(input_cell.format(column="A", row=row+31), "At completion of project (choose one):", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+31), at_completion)
+        self.worksheet.write(input_cell.format(column="A", row=row), "At completion of project (choose one):", right_align);
+        self.worksheet.write(input_cell.format(column="B", row=row), at_completion);
         # self.worksheet.data_validation(input_cell.format(column="B", row=row+31), {'validate':'list', 'source':['Return Unused Sample', 'Destroy Unused Sample']})
-
-        self.worksheet.write(input_cell.format(column="C", row=row+31), "=IF(EXACT(B45, \"Destroy Unused Sample\"), \"GSC will destroy any remaining sample at completion of project\", IF(EXACT(B45,\"Return Unused Sample\"), \"GSC will return any residual sample at Submitter's expense\",\"\"))", bold)
+        self.worksheet.write(input_cell.format(column="C", row=row), "=IF(EXACT(B45, \"Destroy Unused Sample\"), \"GSC will destroy any remaining sample at completion of project\", IF(EXACT(B45,\"Return Unused Sample\"), \"GSC will return any residual sample at Submitter's expense\",\"\"))", bold)
         #self.worksheet.conditional_format(input_cell.format(column="C", row=row+31), {'type':'text', 'criteria':'containsText'})
 
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "Sample Requirements (Volume & Amounts):", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), "http://www.bcgsc.ca/services/sequencing-libraries-faq")
 
-        self.worksheet.write(input_cell.format(column="A", row=row+34), "Sample Requirements (Volume & Amounts):", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+34), "http://www.bcgsc.ca/services/sequencing-libraries-faq")
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "*NCBI Taxonomy link:", right_align)
+        self.worksheet.write(input_cell.format(column="B", row=row), "http://www.ncbi.nlm.nih.gov/Taxonomy/")
 
-        self.worksheet.write(input_cell.format(column="A", row=row+35), "*NCBI Taxonomy link:", right_align)
-        self.worksheet.write(input_cell.format(column="B", row=row+35), "http://www.ncbi.nlm.nih.gov/Taxonomy/")
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "PLEASE NOTE", self.workbook.add_format({'bold':True, 'font_color':'red', 'pattern':True, 'bg_color':'#F7C876', 'align':'right'}))
+        self.worksheet.write(input_cell.format(column="B", row=row), "If indices are supplied, the reads will automatically be split by index.", bold)
 
-        self.worksheet.write(input_cell.format(column="A", row=row+37), "PLEASE NOTE", self.workbook.add_format({'bold':True, 'font_color':'red', 'pattern':True, 'bg_color':'#F7C876'}))
-        self.worksheet.write(input_cell.format(column="B", row=row+37), "If indices are supplied, the reads will automatically be split by index.", bold)
-        self.worksheet.write(input_cell.format(column="A", row=row+38), "", self.workbook.add_format({'bold':True, 'font_color':'red', 'pattern':True, 'bg_color':'#F7C876'}))
-        self.worksheet.write(input_cell.format(column="B", row=row+38), "If the reads require splitting by index, but indices are not supplied or are incorrect, there will be a 1-2 week delay in the data processing.", bold)
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "", self.workbook.add_format({'bold':True, 'font_color':'red', 'pattern':True, 'bg_color':'#F7C876'}))
+        self.worksheet.write(input_cell.format(column="B", row=row), "If the reads require splitting by index, but indices are not supplied or are incorrect, there will be a 1-2 week delay in the data processing.", bold)
 
-        self.worksheet.write_rich_string(input_cell.format(column="A", row=row+40),
+        row += 2
+        self.worksheet.write_rich_string(input_cell.format(column="A", row=row),
                                          bold, 'Mandatory Fields in ',
                                          red, 'RED',
                                          bold, ', Optional Fields in ',
                                          blue, 'BLUE',
                                          yellow_fill)
 
-        self.worksheet.write_rich_string(input_cell.format(column="A", row=row+41),
+        row += 2
+        self.worksheet.write_rich_string(input_cell.format(column="A", row=row),
                                          bold, 'Enter POOL details below',
                                          yellow_fill)
 
