@@ -367,7 +367,7 @@ class GSCForm(object):
         self._sequencing.get_read_type_display(),
         self._sequencing.read1_length,
         self._sequencing.sequencing_goal,
-        self._sequencing.sequencing_instrument,
+        self._sequencing.get_sequencing_instrument_display(),
         self._sequencing.format_for_data_submission,
         "N/A",
         "",
@@ -515,7 +515,7 @@ class Submission(object):
 
     def __init__(self, df_pool, df_samples, output):
 
-        self.pool_start = 58
+        self.pool_start = 63
         self.sample_start = self.pool_start + len(df_pool) + 10
 
         self.writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -549,7 +549,6 @@ class Submission(object):
     def write_address_box(self, info_dict):
         ## updated by jtaghiyar
         # refactored to use relative spacing instead of hard coded spacing for ease if the GSC updates their form again..
-        # Row
 
         HEADER = ["Deliver/ship samples on dry ice or ice pack to:",
                   "%s" % info_dict['name'],
@@ -572,7 +571,7 @@ class Submission(object):
         bcgsc_standard = "Yes" if info_dict.get('bcgsc_standard') else "No"
         custom = "Yes" if info_dict.get('custom') else "No"
         pbal_library = "Yes" if info_dict.get('is_this_pbal_library') else "No"
-        is_this_chromium_library = "Yes" if info_dict.get('is_this_chromium_library') else "No"
+        chromium_library = "Yes" if info_dict.get('is_this_chromium_library') else "No"
         at_completion = "Return unused sample" if info_dict['at_completion']=="R" else "Destroy unused sample"
 
         # FORMATS
@@ -592,6 +591,7 @@ class Submission(object):
         light_green = self.workbook.add_format({'pattern':True, 'bold':True, 'align':'right','bg_color':'#E5F6D9', 'border':1})
         dark_green = self.workbook.add_format({'pattern':True, 'bold':True, 'bg_color':'#73A94F','border':2})
         peach = self.workbook.add_format({'pattern':True, 'bold':True, 'align':'right','bg_color':'#F7C876', 'border':2})
+        teal = self.workbook.add_format({'pattern':True, 'bold':True, 'align':'right', 'bg_color':'#B7DBE7', 'border':1})
 
         # setting up header box border
         for x in range(0,column_span):
@@ -674,6 +674,24 @@ class Submission(object):
         self.worksheet.write(input_cell.format(column="A", row=row), "Is this is PBAL Library?", peach)
         self.worksheet.write(input_cell.format(column="B", row=row), pbal_library)
         # self.worksheet.data_validation(input_cell.format(column="B", row=row+19), {'validate':'list', 'source':['YES','NO']})
+
+        row += 2
+        self.worksheet.write(input_cell.format(column="A", row=row), "Is this Chromium library?", self.workbook.add_format({'pattern':True, 'bold':True, 'align':'right', 'bg_color':'#B7DBE7', 'border':2}))
+        self.worksheet.write(input_cell.format(column="B", row=row), chromium_library)
+
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "PLEASE NOTE:", self.workbook.add_format(
+            {'pattern': True, 'bold': True, 'align': 'right', 'bg_color': '#B7DBE7', 'font_color':'red', 'border':1}))
+        self.worksheet.write(input_cell.format(column="B", row=row), "If yes, please provide specific chromium sample index name in Column AE. Here are some helpful links:",
+                             self.workbook.add_format({'bold': True, 'font_color':'red', 'align':'left'}))
+
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Single cell:", teal)
+        self.worksheet.write(input_cell.format(column="B", row=row), "http://support.10xgenomics.com/single-cell/sequencing/doc/specifications-sample-index-sets-for-single-cell-3")
+
+        row += 1
+        self.worksheet.write(input_cell.format(column="A", row=row), "Genome/Exome:", teal)
+        self.worksheet.write(input_cell.format(column="B", row=row), "http://support.10xgenomics.com/genome-exome/sequencing/doc/specifications-sample-index-sets-for-genome-and-exome")
 
         row += 2
         self.worksheet.write(input_cell.format(column="A", row=row), "For Custom Library Info only:", dark_green); row+=1
